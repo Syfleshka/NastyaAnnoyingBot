@@ -27,7 +27,8 @@ def get_text_messages(message):
         elif "скучно" in message.text:
             bot.send_message(message.chat.id,
                              "@" + message.from_user.username
-                             + ", с https://www.codewars.com/dashboard тебе будет не так скучно.", 'disable_web_page_preview')
+                             + ", с https://www.codewars.com/dashboard тебе будет не так скучно.",
+                             'disable_web_page_preview')
         elif ("Шутка" in message.text
               or "шутка" in message.text):
             bot.send_message(message.chat.id,
