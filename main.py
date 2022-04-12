@@ -23,12 +23,11 @@ def get_text_messages(message):
             for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
                 bot.send_message(message.chat.id,
                                  "@" + message.from_user.username
-                                 + ", давай я тебе помогу: " + searchResult)
-        elif ("Скуко" in message.text
-              or "скуко" in message.text):
+                                 + ", давай я тебе помогу: " + searchResult, 'disable_web_page_preview')
+        elif "скучно" in message.text:
             bot.send_message(message.chat.id,
                              "@" + message.from_user.username
-                             + ", с https://www.codewars.com/dashboard тебе будет не так скучно.")
+                             + ", с https://www.codewars.com/dashboard тебе будет не так скучно.", 'disable_web_page_preview')
         elif ("Шутка" in message.text
               or "шутка" in message.text):
             bot.send_message(message.chat.id,
@@ -51,7 +50,7 @@ def get_text_messages(message):
                              "*Голосом Алисы \n"
                              + "@" + message.from_user.username
                              + ", вот что я нашла: "
-                             + searchResult)
+                             + searchResult, 'disable_web_page_preview')
     elif message.text == "/help":
         bot.send_message(message.chat.id,
                          "@" + message.from_user.username
