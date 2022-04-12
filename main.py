@@ -1,25 +1,37 @@
+from API_INFO import KEY
+from CONFIG import *
+
 import telebot
 import logging
 from googlesearch import search
-
-from CONFIG import KEY, TARGET
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
 bot = telebot.TeleBot(KEY)
 
 
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, START_MESSAGE)
+
+
+@bot.message_handler(commands=['help'])
+def send_welcome(message):
+    bot.reply_to(message, HELP_MESSAGE)
+
+
+@bot.message_handler(HANDLER_OPTIONS)
 def get_text_messages(message):
+    print(message)
     if message.from_user.username == TARGET:
         if "Как начать" in message.text:
             bot.send_message(message.chat.id,
                              "@" + message.from_user.username
                              + ", серьёзно? Никак.")
         elif ('Как' in message.text
-                or 'А как' in message.text
-                or 'А ' in message.text
-                and '?' in message.text):
+              or 'А как' in message.text
+              or 'А ' in message.text
+              and '?' in message.text):
             for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
                 bot.send_message(message.chat.id,
                                  "@" + message.from_user.username
@@ -52,10 +64,6 @@ def get_text_messages(message):
                              + "@" + message.from_user.username
                              + ", вот что я нашла: "
                              + searchResult, 'disable_web_page_preview')
-    elif message.text == "/help":
-        bot.send_message(message.chat.id,
-                         "@" + message.from_user.username
-                         + ", я живу ради Насти, но если есть какие-то вопросы, можешь задать, обратившись ко мне")
 
 
 bot.polling(none_stop=True, interval=0)
