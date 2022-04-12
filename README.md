@@ -5,7 +5,7 @@ Created specially for https://t.me/+R0wbqoHzEd5kMjgy
 Thanks to @kkomilfo
 
 ## Setup bot
-In file CONFIG.py change KEY to your bot key and TARGET to telegram person tag:
+In `CONFIG.py` change KEY to your bot key and TARGET to telegram person tag:
 ```python
 KEY = 'YOUR:TG:BOT:API:KEY'
 
