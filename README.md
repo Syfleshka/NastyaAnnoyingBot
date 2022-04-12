@@ -12,7 +12,7 @@ Create `API_INFO.py` in root directory and add your telegram bot key[^tgbot]
 KEY = 'YOUR:TELEGRAM:BOT:KEY'
 ```
 
-If you need to manually config project, copy `DEF_CONFIG.py` and rename it to `CONFIG.py`
+If you want to manually config project, copy `DEF_CONFIG.py` and rename it to `CONFIG.py`
 
 ## Bot config
 
