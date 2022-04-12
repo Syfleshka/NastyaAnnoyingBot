@@ -13,4 +13,5 @@ KEY = 'YOUR:TG:BOT:API:KEY'
 TARGET = "kkomilfo"
 ```
 
-To create your own bot use guide: [EN](https://core.telegram.org/bots), [RU](https://habr.com/ru/post/262247/) with [Telegram Bot API](https://core.telegram.org/bots/api)
+To get your own bot key use guide: [EN](https://core.telegram.org/bots), [RU](https://habr.com/ru/post/262247/)
+Or make your own bot with [Telegram Bot API](https://core.telegram.org/bots/api)
