@@ -1,9 +1,15 @@
-from API_INFO import KEY
-from CONFIG import *
+import logging
+from pathlib import Path
 
 import telebot
-import logging
 from googlesearch import search
+
+from API_INFO import KEY
+
+if Path("CONFIG.py").exists():
+    from CONFIG import *
+else:
+    from CONFIG_DEF import *
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
@@ -16,46 +22,38 @@ def send_welcome(message):
 
 
 @bot.message_handler(commands=['help'])
-def send_welcome(message):
+def send_help(message):
     bot.reply_to(message, HELP_MESSAGE)
 
 
-@bot.message_handler(HANDLER_OPTIONS)
+@bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     print(message)
     if message.from_user.username == TARGET:
-        if "Как начать" in message.text:
-            bot.send_message(message.chat.id,
-                             "@" + message.from_user.username
-                             + ", серьёзно? Никак.")
-        elif ('Как' in message.text
-              or 'А как' in message.text
-              or 'А ' in message.text
-              and '?' in message.text):
+        if ('Как' in message.text
+                or 'А как' in message.text
+                or 'А ' in message.text
+                and '?' in message.text):
             for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
                 bot.send_message(message.chat.id,
                                  "@" + message.from_user.username
-                                 + ", давай я тебе помогу: " + searchResult, 'disable_web_page_preview')
-        elif "скучно" in message.text:
+                                 + ", давай я тебе помогу: " + searchResult,
+                                 disable_web_page_preview=True)
+        elif ("Скучн" in message.text
+              or "скучн" in message.text):
             bot.send_message(message.chat.id,
                              "@" + message.from_user.username
-                             + ", с https://www.codewars.com/dashboard тебе будет не так скучно.",
-                             'disable_web_page_preview')
+                             + ", https://www.codewars.com/dashboard не даст тебе заскучать.",
+                             disable_web_page_preview=True)
         elif ("Шутка" in message.text
-              or "шутка" in message.text):
-            bot.send_message(message.chat.id,
-                             "@" + message.from_user.username
-                             + ", шутка-хуютка.")
-        elif ("Шутки" in message.text
-              or "шутки" in message.text):
-            bot.send_message(message.chat.id,
-                             "@" + message.from_user.username
-                             + ", шутки-хуютки.")
-        elif ("Шуток" in message.text
+              or "шутка" in message.text
+              or "Шутки" in message.text
+              or "шутки" in message.text
+              or "Шуток" in message.text
               or "шуток" in message.text):
             bot.send_message(message.chat.id,
                              "@" + message.from_user.username
-                             + ", шуток-хуюток.")
+                             + ", шутка-хуютка.")
 
     elif '@kkomilfobot' in message.text:
         for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
@@ -63,7 +61,8 @@ def get_text_messages(message):
                              "*Голосом Алисы \n"
                              + "@" + message.from_user.username
                              + ", вот что я нашла: "
-                             + searchResult, 'disable_web_page_preview')
+                             + searchResult,
+                             disable_web_page_preview=True)
 
 
 bot.polling(none_stop=True, interval=0)
