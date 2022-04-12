@@ -1,12 +1,13 @@
 # NastyaAnnoyingBot
-## Telegram Annoying bot
+## Telegram Annoying bot[^tgbotadv]
+
 Created specially for https://t.me/+R0wbqoHzEd5kMjgy
 
 Thanks to @kkomilfo
 
 ## Setup bot
 
-Create `API_INFO.py` in root directory and add your telegram bot key:
+Create `API_INFO.py` in root directory and add your telegram bot key[^tgbot]
 ```python
 KEY = 'YOUR:TELEGRAM:BOT:KEY'
 ```
@@ -25,6 +26,5 @@ START_MESSAGE = 'Привет, я тут для того, чтобы помоч�
 HELP_MESSAGE = 'Я живу ради Насти, но если есть какие-то вопросы, можешь задать, обратившись ко мне'
 ```
 
-To get your own bot key use guide: [EN](https://core.telegram.org/bots), [RU](https://habr.com/ru/post/262247/)
-
-Or make your own bot with [Telegram Bot API](https://core.telegram.org/bots/api)
+[^tgbotadv]: Make your own bot with [Telegram Bot API](https://core.telegram.org/bots/api)
+[^tgbot]: To get your own bot key use guide: [EN](https://core.telegram.org/bots), [RU](https://habr.com/ru/post/262247/)
