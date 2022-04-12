@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+import requests
 
 import telebot
 from googlesearch import search
@@ -15,6 +16,9 @@ logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
 bot = telebot.TeleBot(KEY)
 
+# reset bot at every start to prevent spam
+requests.get('https://api.telegram.org/bot' + KEY + '/getUpdates?offset=-1')
+
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -24,6 +28,13 @@ def send_welcome(message):
 @bot.message_handler(commands=['help'])
 def send_help(message):
     bot.reply_to(message, HELP_MESSAGE)
+
+
+@bot.message_handler(commands=['google'])
+def send_google(message):
+    for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
+        bot.reply_to(message, "*Голосом Алисы \nВот что я нашла: " + searchResult,
+                     disable_web_page_preview=True)
 
 
 @bot.message_handler(content_types=['text'])
@@ -36,13 +47,13 @@ def get_text_messages(message):
                 and '?' in message.text):
             for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
                 bot.send_message(message.chat.id,
-                                 "@" + message.from_user.username
+                                 "Соб@ка." + message.from_user.username
                                  + ", давай я тебе помогу: " + searchResult,
                                  disable_web_page_preview=True)
         elif ("Скучн" in message.text
               or "скучн" in message.text):
             bot.send_message(message.chat.id,
-                             "@" + message.from_user.username
+                             "Соб@ка." + message.from_user.username
                              + ", https://www.codewars.com/dashboard не даст тебе заскучать.",
                              disable_web_page_preview=True)
         elif ("Шутка" in message.text
@@ -52,17 +63,8 @@ def get_text_messages(message):
               or "Шуток" in message.text
               or "шуток" in message.text):
             bot.send_message(message.chat.id,
-                             "@" + message.from_user.username
+                             "Соб@ка." + message.from_user.username
                              + ", шутка-хуютка.")
-
-    elif '@kkomilfobot' in message.text:
-        for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
-            bot.send_message(message.chat.id,
-                             "*Голосом Алисы \n"
-                             + "@" + message.from_user.username
-                             + ", вот что я нашла: "
-                             + searchResult,
-                             disable_web_page_preview=True)
 
 
 bot.polling(none_stop=True, interval=0)
