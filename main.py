@@ -32,10 +32,10 @@ def send_help(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    print(message)
     if message.from_user.username == TARGET:
         if ('Как' in message.text
                 or 'А как' in message.text
+                or 'А что' in message.text
                 or 'Что' in message.text
                 or 'Для' in message.text
                 or 'И как' in message.text
@@ -81,7 +81,8 @@ def get_text_messages(message):
                              + ", к сожалению сегодня обещавший занят, попробуй в другой день.")
     elif '@kkomilfobot' in message.text:
         if message.text != '@kkomilfobot':
-            if 'Влад классный?' in message.text:
+            if (' классный?' in message.text
+                    or ' классная?' in message.text):
                 bot.reply_to(message, 'Да <3')
             else:
                 for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
