@@ -55,13 +55,17 @@ def get_text_messages(message):
         elif any([i == message.text.lower() for i in PIDOR]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пидора ответ.')
 
+        # ultrapidor answer
+        elif any([i == message.text.lower() for i in ULTRAPIDOR]):
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, та пидора ответ.')
+
         # promise check
         elif any([i in message.text.lower() for i in PROMISE]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}'
                              f', к сожалению сегодня обещавший занят, попробуй в другой день.')
         # annoying stripped question mark check
         elif any([i == message.text.lower() for i in SIGN]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}!')
+            bot.reply_to(message, f'!')
 
     elif f'@{BOTNAME}' in message.text:
         if message.text != f'@{BOTNAME}':
