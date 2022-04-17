@@ -43,6 +43,10 @@ def get_text_messages(message):
                              f', https://www.codewars.com/dashboard не даст тебе заскучать',
                              disable_web_page_preview=True)
 
+        # Checking for why question
+        elif any([i == message.text.lower() for i in WHY]):
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, по кочану.')
+
         # Checking for stupid joke
         elif any([i in message.text.lower() for i in JOKE]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, шутка-хуютка.')
