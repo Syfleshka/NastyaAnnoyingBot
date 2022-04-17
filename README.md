@@ -12,7 +12,7 @@ Create `API_INFO.py` in root directory and add your telegram bot key[^tgbot]
 KEY = 'YOUR:TELEGRAM:BOT:KEY'
 ```
 
-If you want to manually config project, copy `DEF_CONFIG.py` and rename it to `CONFIG.py`
+
 
 ## Bot config
 
@@ -21,9 +21,17 @@ If you want to manually config project, copy `DEF_CONFIG.py` and rename it to `C
 # Your target's username, without @
 TARGET = 'kkomilfo'
 
+# Your bot username, without @
+BOTNAME = 'kkomilfobot'
+
 # Default start and help Messages
-START_MESSAGE = 'Привет, я тут для того, чтобы помочь Насте учить JavaScript'
-HELP_MESSAGE = 'Я живу ради Насти, но если есть какие-то вопросы, можешь задать, обратившись ко мне'
+START_MESSAGE = 'TEXT'
+HELP_MESSAGE = 'TEXT'
+
+# Triggers as arrays
+QUESTIONS = ['TRIGGER', 'TRIGGER']
+BORING = ['TRIGGER']
+# ...
 ```
 
 [^tgbotadv]: Make your own bot with [Telegram Bot API](https://core.telegram.org/bots/api)
