@@ -3,7 +3,7 @@
 
 # TARGET = 'kkomilfo'
 # TARGET = 'Syfleshek'
-TARGET = 'kkomilfo'
+TARGETS = ['kkomilfo', 'izhelich']
 
 BOTNAME = 'kkomilfobot'
 
