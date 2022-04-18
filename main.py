@@ -29,7 +29,7 @@ def send_help(message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     print(message)
-    if message.from_user.username == TARGET:
+    if message.from_user.username in TARGETS:
 
         # Checking for question
         if any([i in message.text.lower() for i in QUESTIONS]) and '?' in message.text.lower():
