@@ -78,7 +78,7 @@ def get_text_messages(message):
 
             else:
                 for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
-                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла:" + searchResult,
+                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла: " + searchResult,
                                  disable_web_page_preview=True)
 
 
