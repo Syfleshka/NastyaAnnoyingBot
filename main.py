@@ -29,13 +29,28 @@ def send_help(message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     print(message)
-    if message.from_user.username in TARGETS:
+    if f'@{BOTNAME}' in message.text:
+        if message.text != f'@{BOTNAME}':
+            if any([i in message.text.lower() for i in COOL]) and (message.from_user.username not in TARGETS):
+                bot.reply_to(message, 'Да <3')
+            elif any([i in message.text.lower() for i in JS_SEARCH]):
+                for searchResult in search(f'{message.text} site: https://learn.javascript.ru/',
+                                           tld="co.in", num=1, stop=1, pause=2):
+                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла на learnjs: " + searchResult,
+                                 disable_web_page_preview=True)
+            else:
+                for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
+                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла: " + searchResult,
+                                 disable_web_page_preview=True)
+    elif message.from_user.username in TARGETS:
 
         # Checking for question
         if any([i in message.text.lower() for i in QUESTIONS]) and '?' in message.text.lower():
             for search_result in search(message.text, tld="co.in", num=1, stop=1, pause=2):
                 bot.send_message(message.chat.id, f'@{message.from_user.username}, давай я помогу: {search_result}',
                                  disable_web_page_preview=True)
+                # bot.send_message(message.chat.id, f'@{message.from_user.username},'
+                # f'прости, не могу ничем помочь, мне за это не заплатят.')
 
         # Checking for boring
         elif any([i in message.text.lower() for i in BORING]):
@@ -70,16 +85,6 @@ def get_text_messages(message):
         # annoying stripped question mark check
         elif any([i == message.text.lower() for i in SIGN]):
             bot.reply_to(message, f'!')
-
-    elif f'@{BOTNAME}' in message.text:
-        if message.text != f'@{BOTNAME}':
-            if any([i in message.text.lower() for i in COOL]):
-                bot.reply_to(message, 'Да <3')
-
-            else:
-                for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
-                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла: " + searchResult,
-                                 disable_web_page_preview=True)
 
 
 bot.polling(none_stop=True, interval=0)
