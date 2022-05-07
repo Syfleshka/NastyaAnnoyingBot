@@ -25,6 +25,7 @@ ULTRAPIDOR = ['та нет', 'та нет.']
 PROMISE = ['ты обещал']
 SIGN = ['?']
 COOL = [' классный?', ' классная?', ' классное?']
+WHY_EASY = ['изи', 'та изи']
 
 
 JS_SEARCH = ['js ', ' js', 'javascript']
