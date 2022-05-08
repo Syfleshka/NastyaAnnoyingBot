@@ -3,7 +3,6 @@
 
 # TARGET = 'kkomilfo'
 # TARGET = 'Syfleshek'
-TARGET = ['kkomilfo']
 TARGETS = ['kkomilfo', 'izhelich']
 
 BOTNAME = 'kkomilfobot'
@@ -29,6 +28,8 @@ PROMISE = ['ты обещал']
 SIGN = ['?']
 COOL = [' классный?', ' классная?', ' классное?', ' клёвый?', ' клёвая?', ' клевый?', ' клевая?']
 HORO = ['предскажи будущее']
+COOL = [' классный?', ' классная?', ' классное?']
+WHY_EASY = ['изи', 'та изи']
 
 
 JS_SEARCH = ['js ', ' js', 'javascript']
