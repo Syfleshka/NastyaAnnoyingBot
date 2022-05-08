@@ -70,6 +70,10 @@ def get_text_messages(message):
         elif any([i == message.text.lower() for i in KIRKOROV]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пизда.')
 
+        # who easy answer
+        elif any([i == message.text.lower() for i in WHY_EASY]):
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, хуизи')
+
         # pidor answer
         elif any([i == message.text.lower() for i in PIDOR]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пидора ответ.')
