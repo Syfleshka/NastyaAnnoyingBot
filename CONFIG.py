@@ -3,6 +3,7 @@
 
 # TARGET = 'kkomilfo'
 # TARGET = 'Syfleshek'
+TARGET = ['kkomilfo']
 TARGETS = ['kkomilfo', 'izhelich']
 
 BOTNAME = 'kkomilfobot'
@@ -19,12 +20,15 @@ BORING = ['скучн']
 WHY = ['почему?']
 JOKE = ['шутк', 'шуто']
 KIRKOROV = ['да', 'да.']
+KIRKOROVMULTI = ['дадада', 'дадад', 'адада', 'ададад', 'дададад']
+TRAKTORIST = ['300', 'триста', 'тристо', 'три сотни']
 PIDOR = ['нет', 'нет.']
 KIRKOROV_PIDOR = ['да нет', 'да нет.']
 ULTRAPIDOR = ['та нет', 'та нет.']
 PROMISE = ['ты обещал']
 SIGN = ['?']
-COOL = [' классный?', ' классная?', ' классное?']
+COOL = [' классный?', ' классная?', ' классное?', ' клёвый?', ' клёвая?', ' клевый?', ' клевая?']
+HORO = ['предскажи будущее']
 
 
 JS_SEARCH = ['js ', ' js', 'javascript']

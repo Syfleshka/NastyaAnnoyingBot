@@ -1,11 +1,10 @@
 import logging
-import requests
 
+import requests
 import telebot
 from googlesearch import search
 
 from API_INFO import KEY
-
 from CONFIG import *
 
 logger = telebot.logger
@@ -28,25 +27,34 @@ def send_help(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
+    message_text = message.text.replace(f'@{BOTNAME}', "")
     print(message)
     if f'@{BOTNAME}' in message.text:
         if message.text != f'@{BOTNAME}':
+            print(message_text)
             if any([i in message.text.lower() for i in COOL]) and (message.from_user.username not in TARGETS):
                 bot.reply_to(message, 'Да <3')
+            elif any([i in message.text.lower() for i in HORO]) and (message.from_user.username not in TARGETS):
+                bot.reply_to(message, 'Что-то было, что-то будет.'
+                                      ' Если будешь делать хуже - будет хуже. Сделаешь лучше - будет лучше.')
             elif any([i in message.text.lower() for i in JS_SEARCH]):
-                for searchResult in search(f'{message.text} site: https://learn.javascript.ru/',
+                for searchResult in search(f'{message_text} site: https://learn.javascript.ru/',
                                            tld="co.in", num=1, stop=1, pause=2):
                     bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла на learnjs: " + searchResult,
                                  disable_web_page_preview=True)
             else:
-                for searchResult in search(message.text, tld="co.in", num=1, stop=1, pause=2):
+                for searchResult in search(f'{message_text} -context.reverso.net', tld="co.in", num=1, stop=1,
+                                           pause=2):
                     bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла: " + searchResult,
                                  disable_web_page_preview=True)
     elif message.from_user.username in TARGETS:
-
+        message.text.replace(f'@{BOTNAME}', "")
         # Checking for question
-        if any([i in message.text.lower() for i in QUESTIONS]) and '?' in message.text.lower():
-            for search_result in search(message.text, tld="co.in", num=1, stop=1, pause=2):
+        if any([i in message.text.lower() for i in QUESTIONS]) \
+                and '?' in message.text.lower() \
+                and message.from_user.username in TARGET:
+            for search_result in search(f'{message_text} -context.reverso.net', tld="co.in", num=1, stop=1,
+                                        pause=2):
                 bot.send_message(message.chat.id, f'@{message.from_user.username}, давай я помогу: {search_result}',
                                  disable_web_page_preview=True)
                 # bot.send_message(message.chat.id, f'@{message.from_user.username},'
@@ -55,7 +63,7 @@ def get_text_messages(message):
         # Checking for boring
         elif any([i in message.text.lower() for i in BORING]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}'
-                             f', https://www.codewars.com/dashboard не даст тебе заскучать',
+                                              f', https://www.codewars.com/dashboard не даст тебе заскучать',
                              disable_web_page_preview=True)
 
         # Checking for why question
@@ -69,6 +77,15 @@ def get_text_messages(message):
         # Kirkorov answer
         elif any([i == message.text.lower() for i in KIRKOROV]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пизда.')
+
+        # KIRKOROVMULTI answer
+        elif any([i == message.text.lower() for i in KIRKOROVMULTI]):
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, пиздапиздапизда.')
+
+        # TRAKTORIST answer
+        elif any([i == message.text.lower() for i in TRAKTORIST]):
+            bot.send_message(message.chat.id,
+                             f'@{message.from_user.username}, вам надо бы зайти на приём к трактористу.')
 
         # pidor answer
         elif any([i == message.text.lower() for i in PIDOR]):
@@ -85,7 +102,7 @@ def get_text_messages(message):
         # promise check
         elif any([i in message.text.lower() for i in PROMISE]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}'
-                             f', к сожалению сегодня обещавший занят, попробуй в другой день.')
+                                              f', к сожалению сегодня обещавший занят, попробуй в другой день.')
         # annoying stripped question mark check
         elif any([i == message.text.lower() for i in SIGN]):
             bot.reply_to(message, f'!')
@@ -94,4 +111,4 @@ def get_text_messages(message):
         # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список опреаторов
 
 
-bot.polling(none_stop=True, interval=0)
+bot.infinity_polling()
