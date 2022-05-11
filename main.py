@@ -75,7 +75,7 @@ def get_text_messages(message):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, шутка-хуютка.')
 
         # Kirkorov answer
-        elif any([i == message.text.lower() for i in KIRKOROV]):
+        elif any([len(set(i) ^ set(message.text.lower())) == 0 for i in KIRKOROV]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пизда.')
 
         # KIRKOROVMULTI answer
@@ -89,10 +89,10 @@ def get_text_messages(message):
 
         # who easy answer
         elif any([i == message.text.lower() for i in WHY_EASY]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, хуизи')
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, хуизи.')
 
         # pidor answer
-        elif any([i == message.text.lower() for i in PIDOR]):
+        elif any([len(set(i) ^ set(message.text.lower())) == 0 for i in PIDOR]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, пидора ответ.')
 
         # ultrapidor answer
@@ -107,9 +107,14 @@ def get_text_messages(message):
         elif any([i in message.text.lower() for i in PROMISE]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}'
                                               f', к сожалению сегодня обещавший занят, попробуй в другой день.')
+
         # annoying stripped question mark check
         elif any([i == message.text.lower() for i in SIGN]):
             bot.reply_to(message, f'!')
+
+        # 👀
+        elif any([i in message.text.lower() for i in SMILEY]):
+            bot.reply_to(message, f' не подглядывай')
 
         # Добавить функцию, когда Настя говорит что что-то знает (исключаем не из строки)
         # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список опреаторов
