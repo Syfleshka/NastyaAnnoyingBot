@@ -1,123 +1,162 @@
 import logging
-
 import requests
 import telebot
+import re
+
 from googlesearch import search
 
 from API_INFO import KEY
 from CONFIG import *
+from DICTIONARY import *
 
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
 bot = telebot.TeleBot(KEY)
 
-# reset bot at every start to prevent spam
+# Reset bot at every start to prevent spam
 requests.get('https://api.telegram.org/bot' + KEY + '/getUpdates?offset=-1')
 
+#
+# Message send functions
+#
 
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.reply_to(message, START_MESSAGE)
+
+def send_mention(message, answer_text):
+    bot.send_message(message.chat.id,
+                     f'@{message.from_user.username},'
+                     f' {answer_text}',
+                     disable_web_page_preview=True)
 
 
-@bot.message_handler(commands=['help'])
-def send_help(message):
-    bot.reply_to(message, HELP_MESSAGE)
+def send_reply(message, answer_text):
+    bot.reply_to(message, answer_text, disable_web_page_preview=True)
+
+
+def send_search_result(message, message_text, add_search_args, answer_text):
+    for searchResult in search(f'{message_text} {add_search_args}', tld="co.in", num=1, stop=1, pause=2):
+        bot.reply_to(message, f'{answer_text} {searchResult}', disable_web_page_preview=True)
+
+#
+# Message check functions
+#
+
+
+def check_in(message_text, check_array):
+    return any([i in message_text.lower() for i in check_array])
+
+
+def check_equals(message_text, check_array):
+    return any([i == message_text.lower() for i in check_array])
+
+
+def check_set(message_text, check_array):
+    return any([len(set(i) ^ set(message_text.lower())) == 0 for i in check_array])
+
+
+def not_in_restricted_names(message, targets):
+    return message.from_user.username not in targets
+
+#
+# Handler
+#
 
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    message_text = message.text.replace(f'@{BOTNAME}', "")
+    message_text = message.text.replace(f'@{BOT_NAME}', '')
+
+    stripped_message_text = re.sub(' ', '', message_text)
+    stripped_message_text = re.sub('"', '', stripped_message_text)
+    stripped_message_text = re.sub(rf"[.':,!@#№;%?*$^&()_]", '', stripped_message_text)
+    stripped_message_text = re.sub(r"\d+", "", stripped_message_text)
+
+    # Commands
+    if f'/start@{BOT_NAME}' == message.text:
+        return send_reply(message, START_MESSAGE)
+
+    if f'/help@{BOT_NAME}' == message.text:
+        return send_reply(message, HELP_MESSAGE)
+
+    # Some logs
     print(message)
-    if f'@{BOTNAME}' in message.text:
-        if message.text != f'@{BOTNAME}':
-            print(message_text)
-            if any([i in message.text.lower() for i in COOL]) and (message.from_user.username not in TARGETS):
-                bot.reply_to(message, 'Да <3')
-            elif any([i in message.text.lower() for i in HORO]) and (message.from_user.username not in TARGETS):
-                bot.reply_to(message, 'Что-то было, что-то будет.'
-                                      ' Если будешь делать хуже - будет хуже. Сделаешь лучше - будет лучше.')
-            elif any([i in message.text.lower() for i in JS_SEARCH]):
-                for searchResult in search(f'{message_text} site: https://learn.javascript.ru/',
-                                           tld="co.in", num=1, stop=1, pause=2):
-                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла на learnjs: " + searchResult,
-                                 disable_web_page_preview=True)
+    print(message_text)
+
+    # Work with user requests
+    if f'@{BOT_NAME}' in message.text:
+
+        # First check for predefined phrases
+        if message_text != '' and not_in_restricted_names(message, TARGETS):
+            if check_in(message_text, COOL):
+                return send_reply(message, COOL_ANSWER)
+            if check_in(message_text, HORO):
+                return send_reply(message, HORO_ANSWER)
+
+        # Search
+        if message_text != '':
+            if check_in(message_text, JS_SEARCH):
+                return send_search_result(message, message_text, JS_SEARCH_OPTIONS, JS_SEARCH_ANSWER)
             else:
-                for searchResult in search(f'{message_text} -context.reverso.net', tld="co.in", num=1, stop=1,
-                                           pause=2):
-                    bot.reply_to(message, "*Голосом Алисы* \nВот что я нашла: " + searchResult,
-                                 disable_web_page_preview=True)
+                return send_search_result(message, message_text, SEARCH_OPTIONS, SEARCH_ANSWER)
+
     elif message.from_user.username in TARGETS:
-        message.text.replace(f'@{BOTNAME}', "")
         # Checking for question
-        if any([i in message.text.lower() for i in QUESTIONS]) \
-                and '?' in message.text.lower() \
-                and message.from_user.username in TARGET:
-            for search_result in search(f'{message_text} -context.reverso.net', tld="co.in", num=1, stop=1,
-                                        pause=2):
-                bot.send_message(message.chat.id, f'@{message.from_user.username}, давай я помогу: {search_result}',
-                                 disable_web_page_preview=True)
-                # bot.send_message(message.chat.id, f'@{message.from_user.username},'
-                # f'прости, не могу ничем помочь, мне за это не заплатят.')
+        if check_in(message_text, QUESTIONS) and ('?' in message_text.lower()) and (len(message_text) > 7):
+            return send_search_result(message, message_text, QUESTIONS_OPTIONS, QUESTIONS_ANSWER)
 
         # Checking for boring
-        elif any([i in message.text.lower() for i in BORING]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}'
-                                              f', https://www.codewars.com/dashboard не даст тебе заскучать',
-                             disable_web_page_preview=True)
+        if check_in(message_text, BORING):
+            return send_mention(message, BORING_ANSWER)
 
         # Checking for why question
-        elif any([i == message.text.lower() for i in WHY]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, по кочану.')
+        if check_equals(message_text, WHY):
+            return send_mention(message, WHY_ANSWER)
 
         # Checking for stupid joke
-        elif any([i in message.text.lower() for i in JOKE]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, шутка-хуютка.')
-
-        # Kirkorov answer
-        elif any([len(set(i) ^ set(message.text.lower())) == 0 for i in KIRKOROV]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, пизда.')
+        if check_in(message_text, JOKE):
+            return send_mention(message, JOKE_ANSWER)
 
         # KIRKOROVMULTI answer
-        elif any([i == message.text.lower() for i in KIRKOROVMULTI]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, пиздапиздапизда.')
+        if check_equals(message_text, KIRKOROVMULTI):
+            return send_mention(message, KIRKOROVMULTI_ANSWER)
+
+        # Kirkorov answer
+        if check_set(stripped_message_text, KIRKOROV):
+            return send_mention(message, KIRKOROV_ANSWER)
 
         # TRAKTORIST answer
-        elif any([i == message.text.lower() for i in TRAKTORIST]):
-            bot.send_message(message.chat.id,
-                             f'@{message.from_user.username}, вам надо бы зайти на приём к трактористу.')
+        if check_equals(message_text, TRAKTORIST):
+            return send_mention(message, TRAKTORIST_ANSWER)
 
         # who easy answer
-        elif any([i == message.text.lower() for i in WHY_EASY]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, хуизи.')
+        if check_in(message_text, WHO_EASY) and (len(message_text) < 7):
+            return send_mention(message, WHO_EASY_ANSWER)
 
         # pidor answer
-        elif any([len(set(i) ^ set(message.text.lower())) == 0 for i in PIDOR]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, пидора ответ.')
+        if check_set(stripped_message_text, PIDOR):
+            return send_mention(message, PIDOR_ANSWER)
 
         # ultrapidor answer
-        elif any([i == message.text.lower() for i in ULTRAPIDOR]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, та пидора ответ.')
+        if check_equals(message_text, ULTRAPIDOR):
+            return send_mention(message, ULTRAPIDOR_ANSWER)
 
         # KIRKOROV_PIDOR answer
-        elif any([i == message.text.lower() for i in KIRKOROV_PIDOR]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}, и всё же пидора ответ.')
+        if check_equals(message_text, KIRKOROV_PIDOR):
+            return send_mention(message, KIRKOROV_PIDOR_ANSWER)
 
         # promise check
-        elif any([i in message.text.lower() for i in PROMISE]):
-            bot.send_message(message.chat.id, f'@{message.from_user.username}'
-                                              f', к сожалению сегодня обещавший занят, попробуй в другой день.')
+        if check_in(message_text, PROMISE):
+            return send_mention(message, PROMISE_ANSWER)
 
         # annoying stripped question mark check
-        elif any([i == message.text.lower() for i in SIGN]):
-            bot.reply_to(message, f'!')
+        if check_equals(message_text, SIGN):
+            return send_mention(message, SIGN_ANSWER)
 
         # 👀
-        elif any([i in message.text.lower() for i in SMILEY]):
-            bot.reply_to(message, f' не подглядывай')
+        if check_in(message_text, SMILEY):
+            return send_mention(message, SMILEY_ANSWER)
 
         # Добавить функцию, когда Настя говорит что что-то знает (исключаем не из строки)
-        # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список опреаторов
+        # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список операторов
 
 
 bot.infinity_polling()

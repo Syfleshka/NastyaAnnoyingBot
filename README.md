@@ -23,14 +23,25 @@ TARGET = 'kkomilfo'
 
 # Your bot username, without @
 BOTNAME = 'kkomilfobot'
+# ...
+```
 
-# Default start and help Messages
-START_MESSAGE = 'TEXT'
-HELP_MESSAGE = 'TEXT'
+`DICTIONARY.py`
+```python
+# Dictionary file for bot
 
-# Triggers as arrays
-QUESTIONS = ['TRIGGER', 'TRIGGER']
-BORING = ['TRIGGER']
+# / messages
+START_MESSAGE = 'Hello'
+HELP_MESSAGE = 'I can Help you'
+
+# All other messages.
+NAME = ['Array']
+NAME_ANSWER = 'String'
+
+# Search options
+SEARCH = 'String or None, if unused'
+SEARCH_OPTIONS = 'String, will be added to the end of search query'
+SEARCH_ANSWER = 'String, will be added before result link'
 # ...
 ```
 
