@@ -1,7 +1,7 @@
 # NastyaAnnoyingBot
 ## Telegram Annoying bot[^tgbotadv]
 
-Created specially for https://t.me/+R0wbqoHzEd5kMjgy
+Created specially for https://t.me/+bEubmjYw3jo0N2M6
 
 Thanks to @kkomilfo
 
