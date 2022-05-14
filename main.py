@@ -82,16 +82,23 @@ def get_text_messages(message):
         elif any([i == message.text.lower() for i in KIRKOROV_PIDOR]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}, и всё же пидора ответ.')
 
+        # SORRY answer
+        elif any([i == message.text.lower() for i in SORRY):
+            bot.send_message(message.chat.id, f'@{message.from_user.username}, САМА ВИНОВАТА ЛЕНИВАЯ ЖОПА!!1')
+
         # promise check
         elif any([i in message.text.lower() for i in PROMISE]):
             bot.send_message(message.chat.id, f'@{message.from_user.username}'
                              f', к сожалению сегодня обещавший занят, попробуй в другой день.')
+
+
         # annoying stripped question mark check
         elif any([i == message.text.lower() for i in SIGN]):
             bot.reply_to(message, f'!')
-
+        elif any([i in message.from_user.username[])
         # Добавить функцию, когда Настя говорит что что-то знает (исключаем не из строки)
         # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список опреаторов
+        # KIRKOROV_PIDOR answer
 
 
 bot.polling(none_stop=True, interval=0)
