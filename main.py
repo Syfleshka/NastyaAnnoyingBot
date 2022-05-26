@@ -155,6 +155,14 @@ def get_text_messages(message):
         if check_in(message_text, SMILEY):
             return send_mention(message, SMILEY_ANSWER)
 
+        # sorry check
+        if check_in(message_text, SORRY):
+            return send_mention(message, SORRY_ANSWER)
+
+        # bee check
+        if check_in(message_text, BEE):
+            return send_mention(message, BEE_ANSWER)
+
         # Добавить функцию, когда Настя говорит что что-то знает (исключаем не из строки)
         # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список операторов
 
