@@ -1,2 +1,2 @@
-TARGETS = ['kkomilfo', 'izhelich']
+TARGETS = ['kkomilfo']
 BOT_NAME = 'kkomilfobot'
