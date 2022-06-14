@@ -163,6 +163,14 @@ def get_text_messages(message):
         if check_in(message_text, BEE):
             return send_mention(message, BEE_ANSWER)
 
+        # koza check
+        if check_in(message_text, KOZA):
+            return send_mention(message, KOZA_ANSWER)
+
+        # easy check
+        if check_in(message_text, EASY):
+            return send_mention(message, EASY_ANSWER)
+        
         # Добавить функцию, когда Настя говорит что что-то знает (исключаем не из строки)
         # бот задаёт вопрос по JS "знаешь <Оператор>", надо написать список операторов
 
